@@ -1,0 +1,5 @@
+# Bu dosyaya takipten çıkılmamasını istediğiniz kullanıcı adlarını yazın.
+# Her satıra bir kullanıcı adı gelmelidir.
+arkadas_kullanici_adi
+marka_hesabim
+sevdigim_sayfa

@@ -1,0 +1,32 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv/
+
+# Config (Hassas bilgiler)
+config.py
+
+# Logs
+*.log
+geckodriver.log
+
+# Database
+*.db
+*.sqlite
+
+# Cookies & Session
+*.pkl
+smart_state.json
+
+# User Data
+accounts.txt
+whitelist.txt
+comments.txt
+known_followers.txt
+index_followers.txt
+index_following.txt

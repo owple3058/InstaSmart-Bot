@@ -1,0 +1,5 @@
+{"timestamp": "2026-01-06T02:49:44.802905", "level": "INFO", "logger": "InstaBot", "message": "Loading plugins from: C:\\Users\\enesk\\OneDrive\\Masaüstü\\Instagram\\src\\plugins"}
+{"timestamp": "2026-01-06T02:49:44.805971", "level": "SUCCESS", "logger": "InstaBot", "message": "Loaded plugin: SessionStats v1.0.0"}
+{"timestamp": "2026-01-06T02:49:44.805971", "level": "INFO", "logger": "InstaBot", "message": "Checking login status with cookies..."}
+{"timestamp": "2026-01-06T02:49:44.805971", "level": "INFO", "logger": "InstaBot", "message": "Starting normal login process..."}
+{"timestamp": "2026-01-06T02:50:01.346551", "level": "ERROR", "logger": "InstaBot", "message": "Error during login", "context": {"error": "Message: \nStacktrace:\nSymbols not available. Dumping unresolved backtrace:\n\t0x7912d3\n\t0x791314\n\t0x57e6dd\n\t0x5c93a5\n\t0x5c977b\n\t0x610382\n\t0x5eb534\n\t0x60db13\n\t0x5eb2e6\n\t0x5bd321\n\t0x5be1d4\n\t0x9e5314\n\t0x9e08cb\n\t0x9fd1aa\n\t0x7ab1d8\n\t0x7b31dd\n\t0x7995d8\n\t0x799799\n\t0x783b28\n\t0x76785d49\n\t0x77d3d5db\n\t0x77d3d561\n"}}

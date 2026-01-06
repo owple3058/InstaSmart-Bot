@@ -11,17 +11,17 @@ class Database:
         self.connect()
 
     def connect(self):
-        """SQLite veritabanını başlatır ve tabloları oluşturur."""
+        """Initializes SQLite database and creates tables."""
         try:
             self.conn = sqlite3.connect(self.db_file)
             self.cursor = self.conn.cursor()
             self.create_tables()
-            print("Veritabanı bağlantısı başarılı.")
+            print("Database connection successful.")
         except Exception as e:
-            print(f"Veritabanı hatası: {e}")
+            print(f"Database error: {e}")
 
     def create_tables(self):
-        # Geçmiş Tablosu
+        # History Table
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,12 +30,12 @@ class Database:
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
-        # İndeksler (Performans için)
+        # Indexes (For performance)
         self.cursor.execute("CREATE INDEX IF NOT EXISTS idx_history_target ON history(target)")
         self.cursor.execute("CREATE INDEX IF NOT EXISTS idx_history_action ON history(action)")
         self.cursor.execute("CREATE INDEX IF NOT EXISTS idx_history_timestamp ON history(timestamp)")
         
-        # İstatistik Tablosu
+        # Stats Table
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS stats (
                 date DATE PRIMARY KEY,
@@ -54,7 +54,7 @@ class Database:
         try:
             self.cursor.execute("INSERT INTO history (action, target, timestamp) VALUES (?, ?, ?)", (action, target, timestamp))
             
-            # İstatistikleri güncelle
+            # Update stats
             col_map = {"LIKE": "likes", "FOLLOW": "follows", "UNFOLLOW": "unfollows", "COMMENT": "comments"}
             if action in col_map:
                 col = col_map[action]
@@ -66,7 +66,7 @@ class Database:
             self.conn.commit()
             return True
         except Exception as e:
-            print(f"DB Kayıt Hatası: {e}")
+            print(f"DB Log Error: {e}")
             return False
 
     def check_history(self, target):
@@ -88,14 +88,14 @@ class Database:
             return None
 
     def get_follow_timestamp(self, username):
-        """Kullanıcının ne zaman takip edildiğini döndürür (datetime objesi veya None)."""
+        """Returns when the user was followed (datetime object or None)."""
         try:
             self.cursor.execute("SELECT timestamp FROM history WHERE target = ? AND action LIKE 'FOLLOW%' ORDER BY timestamp DESC LIMIT 1", (username,))
             row = self.cursor.fetchone()
             if row:
                 return datetime.datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S")
         except Exception as e:
-            print(f"DB Timestamp Hatası: {e}")
+            print(f"DB Timestamp Error: {e}")
         return None
 
     def close(self):

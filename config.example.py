@@ -1,29 +1,40 @@
-# Instagram Giriş Bilgileri
-USERNAME = "KULLANICI_ADINIZ"
-PASSWORD = "SIFRENIZ"
+# Instagram Credentials
+USERNAME = "YOUR_USERNAME"
+PASSWORD = "YOUR_PASSWORD"
 
-# Bot Ayarları
-HEADLESS = False          # Tarayıcıyı gizli modda çalıştır (True/False)
-DISABLE_IMAGES = False    # Görselleri devre dışı bırak (RAM/İnternet tasarrufu)
-SAFE_MODE = True          # Güvenli Mod: Bekleme sürelerini artırır (Tavsiye edilen: True)
+# Bot Settings
+HEADLESS = False          # Run browser in headless mode (True/False)
+DISABLE_IMAGES = False    # Disable images to save RAM/Bandwidth
+SAFE_MODE = True          # Safe Mode: Increases wait times (Recommended: True)
+DRY_RUN = False           # Dry Run / Simulation Mode: Logs actions without clicking (True/False)
 
-# Günlük Limitler (Güvenlik için abartmayın)
+# Daily Limits (Do not exaggerate for safety)
 MAX_LIKES_PER_DAY = 150
 MAX_FOLLOWS_PER_DAY = 100
 MAX_COMMENTS_PER_DAY = 60
 MAX_UNFOLLOWS_PER_DAY = 120
 
-# Hedef Kitle Filtreleri
+# Target Audience Filters
 MIN_FOLLOWER_COUNT = 50
 MAX_FOLLOWER_COUNT = 5000
 
-# Bekleme Süreleri (Saniye)
+# Scheduler & Time Settings
+# ----------------------------------------------------------
+# Silence Period (Sleep Mode) - Bot will pause between these hours
+SLEEP_START_HOUR = 23   # 23:00 (11 PM)
+SLEEP_END_HOUR = 7      # 07:00 (7 AM)
+
+# Activity Peaks (Bot works faster during these hours)
+PEAK_START_HOUR = 18    # 18:00 (6 PM)
+PEAK_END_HOUR = 22      # 22:00 (10 PM)
+
+# Wait Times (Seconds) - Base delays
 BASE_DELAY_MIN = 2
 BASE_DELAY_MAX = 5
-LONG_DELAY_MIN = 5
-LONG_DELAY_MAX = 12
+LONG_DELAY_MIN = 15     # Increased for safety
+LONG_DELAY_MAX = 30
 
-# Tarayıcı Kimlikleri (User Agents)
+# User Agents
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0",

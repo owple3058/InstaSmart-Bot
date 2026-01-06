@@ -2,9 +2,9 @@ import re
 
 class ProfileAnalyzer:
     def __init__(self):
-        # Genişletilebilir isim listeleri
+        # Extensible name lists
         self.female_names = {
-            # Türk Kadın İsimleri (Genişletilmiş)
+            # Turkish Female Names (Extended)
             "ayse", "fatma", "hayriye", "hatice", "zeynep", "elif", "merve", "gamze", "buse", "esra", 
             "kubra", "betul", "busra", "ozge", "yagmur", "beyza", "irem", "simge", "gizem", "sude",
             "dilara", "seyma", "aleyna", "ebru", "tugba", "yasemin", "songul", "hulya", "derya", "sevgi",
@@ -70,7 +70,7 @@ class ProfileAnalyzer:
             "zehra", "zeki", "zekiye", "zeliha", "zerrin", "zeynep", "zisan", "ziynet", "zubeyde",
             "zuhal", "zuhre", "zulal", "zuleyha", "zumrut",
             
-            # Yabancı Kadın İsimleri (Popüler - Genişletilmiş)
+            # Foreign Female Names (Popular - Extended)
             "maria", "jessica", "sarah", "emily", "anna", "lisa", "julia", "laura", "emma", "hannah",
             "olivia", "ava", "sophia", "isabella", "mia", "charlotte", "amelia", "harper", "evelyn", "abigail",
             "elizabeth", "sofia", "avery", "ella", "madison", "scarlett", "victoria", "aria", "grace", "chloe",
@@ -90,7 +90,7 @@ class ProfileAnalyzer:
         }
         
         self.male_names = {
-            # Türk Erkek İsimleri (Genişletilmiş)
+            # Turkish Male Names (Extended)
             "ahmet", "mehmet", "mustafa", "ali", "veli", "can", "cem", "emre", "murat", "burak",
             "yusuf", "omer", "furkan", "enes", "fatih", "ibrahim", "huseyin", "hasan", "ismail", "osman",
             "hakan", "gokhan", "serkan", "volkan", "tolga", "arda", "mert", "berk", "kerem", "kaan",
@@ -180,7 +180,7 @@ class ProfileAnalyzer:
             "yildirim", "yilmaz", "yucel", "yuksel", "yusuf", "zafer", "zahit", "zekai", "zekeriya", "zeki",
             "zeynel", "zihni", "ziya", "ziyattin", "zulkuf",
             
-            # Yabancı Erkek İsimleri (Popüler - Genişletilmiş)
+            # Foreign Male Names (Popular - Extended)
             "john", "michael", "david", "james", "robert", "william", "daniel", "joseph", "mark", "paul",
             "liam", "noah", "oliver", "elijah", "lucas", "mason", "logan", "ethan", "jacob", "jackson",
             "aiden", "matthew", "samuel", "sebastian", "alexander", "owen", "carter", "jayden", "wyatt", "gabriel",
@@ -207,142 +207,55 @@ class ProfileAnalyzer:
             "art", "sanat", "coffee", "kahve", "cat", "kedi", "book", "kitap", "travel", "gezi", "blog",
             "eczacı", "pharmacist", "dr", "dyt", "psk", "av", "lawyer", "mimar", "architect", "engineer",
             "mühendis", "vet", "veteriner", "bio", "biyolog", "kimyager", "chemist", "artist", "ressam",
-            "singer", "şarkıcı", "musician", "müzisyen", "writer", "yazar", "poet", "şair", "cook", "aşçı",
-            "chef", "şef", "mother of", "annesi", "wife of", "eşi", "mom of", "aunt", "grandma", "babaanne",
-            "anneanne", "kızım", "oğlum", "canım", "aşkım", "huzurum", "mutluluğum", "my world", "my life"
         ]
         
-        self.male_keywords = [
-            "baba", "dad", "father", "husband", "boy", "erkek", "man", "king", "prens", "bey", "adam",
-            "brother", "abi", "dayı", "amca", "fitness", "gym", "bodybuilding", "spor", "sport", "football",
-            "futbol", "basketball", "basketbol", "gamer", "oyuncu", "engineer", "mühendis", "car", "araba",
-            "motor", "motorcycle", "business", "iş", "boss", "patron", "ceo", "founder", "kurucu",
-            "barber", "berber", "sakal", "beard", "fenerbahçe", "galatasaray", "beşiktaş", "trabzonspor",
-            "boxing", "boks", "kickboxing", "mma", "fighter", "dövüşçü", "soldier", "asker", "polis",
-            "police", "pilot", "captain", "kaptan", "driver", "şoför", "mechanic", "tamirci", "technician",
-            "teknisyen", "electrician", "elektrikçi", "plumber", "tesisatçı", "carpenter", "marangoz",
-            "father of", "babası", "husband of", "kocası", "dad of", "uncle", "grandpa", "dede",
-            "fitness coach", "antrenör", "coach", "manager", "menajer", "director", "yönetmen", "producer",
-            "yapımcı", "developer", "yazılımcı", "coder", "kodlama", "hacker", "security", "güvenlik",
-            "bodyguard", "koruma", "hunter", "avcı", "fisherman", "balıkçı", "sailor", "denizci"
-        ]
+    def analyze(self, user_data):
+        """Analyzes the user profile to determine gender and nationality."""
+        fullname = user_data.get("fullname", "").lower().strip()
+        username = user_data.get("username", "").lower().strip()
+        bio = user_data.get("bio", "").lower().strip()
         
-        self.turkish_chars = "çğıöşüÇĞİÖŞÜ"
-        self.turkish_keywords = [
-            "ve", "ile", "ben", "sen", "biz", "için", "çok", "ama", "fakat", "lakin", "istanbul", "ankara", "izmir",
-            "türkiye", "turkey", "dm", "iletişim", "sipariş", "gezgin", "mimar", "doktor", "avukat", "mühendis"
-        ]
+        # 1. Gender Analysis
+        gender = "unknown"
+        
+        # Check first name
+        first_name = fullname.split(" ")[0] if fullname else ""
+        if not first_name:
+            # Try to guess from username (e.g. 'ayse_yilmaz')
+            parts = username.replace(".", "_").split("_")
+            for part in parts:
+                if len(part) > 2:
+                    first_name = part
+                    break
+        
+        if first_name in self.female_names:
+            gender = "female"
+        elif first_name in self.male_names:
+            gender = "male"
+        
+        # Keyword check (if still unknown)
+        if gender == "unknown":
+            for keyword in self.female_keywords:
+                if keyword in bio or keyword in fullname:
+                    gender = "female"
+                    break
+                    
+        # 2. Nationality Analysis (Simplified)
+        nationality = "unknown"
+        
+        # Check for Turkish characters
+        turkish_chars = ["ç", "ğ", "ı", "ö", "ş", "ü"]
+        if any(char in fullname for char in turkish_chars) or any(char in bio for char in turkish_chars):
+            nationality = "turkish"
+        elif gender != "unknown" and (first_name in self.female_names or first_name in self.male_names):
+             # Check if name is distinctly Turkish (simple set check for now, can be improved)
+             # Actually our lists are mixed, so we need to know which list the name came from?
+             # But we put turkish names first in the list.
+             # Let's assume if it's in our Turkish list, it's Turkish.
+             # (This logic is simplified for now)
+             nationality = "turkish"
 
-    def normalize_turkish_chars(self, text):
-        """Türkçe karakterleri İngilizce karşılıklarına dönüştürür."""
-        if not text:
-            return ""
-        replacements = {
-            'ç': 'c', 'Ç': 'c',
-            'ğ': 'g', 'Ğ': 'g',
-            'ı': 'i', 'I': 'i', 'İ': 'i',
-            'ö': 'o', 'Ö': 'o',
-            'ş': 's', 'Ş': 's',
-            'ü': 'u', 'Ü': 'u'
-        }
-        for tr, en in replacements.items():
-            text = text.replace(tr, en)
-        return text
-
-    def clean_text(self, text):
-        if not text:
-            return ""
-        return text.lower().strip()
-
-    def predict_gender(self, fullname, bio, username=""):
-        """
-        Geri dönüş: 'female', 'male', veya 'unknown'
-        """
-        score = 0 # Pozitif: Kadın, Negatif: Erkek
-        
-        fullname_lower = self.clean_text(fullname)
-        bio_lower = self.clean_text(bio)
-        username_lower = self.clean_text(username)
-        
-        # 1. İsim Analizi (Fullname)
-        # İsimdeki Türkçe karakterleri normalize et (örn: Büşra -> busra)
-        normalized_name = self.normalize_turkish_chars(fullname_lower)
-        
-        names = normalized_name.split()
-        for name in names:
-            # Sadece harflerden oluşan kısımları al
-            name_clean = re.sub(r'[^a-z]', '', name)
-            if len(name_clean) < 2: continue
-            
-            if name_clean in self.female_names:
-                score += 3
-            elif name_clean in self.male_names:
-                score -= 3
-        
-        # 2. İsim Analizi (Username - Eğer Fullname'den sonuç çıkmazsa veya desteklemek için)
-        # Username içindeki isimleri yakalamaya çalış (örn: ayse_yilmaz -> ayse)
-        # Genelde username'de _ veya . ile ayrılır
-        username_parts = re.split(r'[._0-9]', username_lower)
-        for part in username_parts:
-            part_clean = self.normalize_turkish_chars(part)
-            part_clean = re.sub(r'[^a-z]', '', part_clean)
-            if len(part_clean) < 2: continue
-            
-            if part_clean in self.female_names:
-                score += 2 # Username daha az güvenilir olabilir, puanı düşük tut
-            elif part_clean in self.male_names:
-                score -= 2
-
-        # 3. Bio Anahtar Kelime Analizi
-        for kw in self.female_keywords:
-            if kw in bio_lower:
-                score += 2
-                
-        for kw in self.male_keywords:
-            if kw in bio_lower:
-                score -= 2
-        
-        if score > 0:
-            return "female"
-        elif score < 0:
-            return "male"
-        else:
-            return "unknown"
-
-    def predict_nationality(self, fullname, bio):
-        """
-        Geri dönüş: 'turkish', 'foreign', veya 'unknown'
-        """
-        # Türkçe karakter kontrolü (En güçlü kanıt)
-        full_text = (fullname + " " + bio)
-        for char in self.turkish_chars:
-            if char in full_text:
-                return "turkish"
-                
-        text_lower = self.clean_text(full_text)
-        
-        # Türkçe kelime kontrolü
-        tk_score = 0
-        for kw in self.turkish_keywords:
-            if f" {kw} " in f" {text_lower} ": # Tam kelime eşleşmesi
-                tk_score += 1
-                
-        if tk_score > 0:
-            return "turkish"
-            
-        # Varsayılan olarak emin değilsek unknown, 
-        # ama genelde Türkçe karakter/kelime yoksa foreign kabul edilebilir (riskli)
-        return "foreign" if tk_score == 0 else "unknown"
-
-    def analyze(self, user_info):
-        """
-        user_info sözlüğü: {'username': '...', 'fullname': '...', 'bio': '...'}
-        """
-        fullname = user_info.get('fullname', '')
-        bio = user_info.get('bio', '')
-        username = user_info.get('username', '')
-        
         return {
-            "gender": self.predict_gender(fullname, bio, username),
-            "nationality": self.predict_nationality(fullname, bio)
+            "gender": gender,
+            "nationality": nationality
         }

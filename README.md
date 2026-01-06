@@ -1,72 +1,131 @@
-# 🤖 Smart Instagram Bot (Open Source)
+# 🤖 InstaSmart Framework (Open Source)
 
-Bu proje, Python ve Selenium kullanılarak geliştirilmiş, insan davranışlarını taklit eden akıllı bir Instagram botudur. 
+**InstaSmart** is a modular, safe, and intelligent Instagram automation framework developed using Python and Selenium. It is designed not just as a simple "bot", but as a **simulation framework** that mimics human behavior with high fidelity.
 
-## 🚀 Özellikler
+It features a **Plugin System**, **Dry-Run (Simulation) Mode**, **Smart Guard**, and **Behavioral Strategies** to ensure safety and extensibility.
 
-- **Akıllı Navigasyon:** Instagram'ın tespit algoritmalarına yakalanmamak için butonları ve linkleri insan gibi kullanır.
-- **Güvenli Mod (Safe Mode):** Günlük limitleri aşmamak için otomatik hız ayarı yapar.
-- **Hedef Kitle Analizi:** Belirli hesapların takipçilerini analiz eder ve kriterlere uyanları takip eder.
-- **Otomatik Takipten Çıkma (Unfollow):** Sizi takip etmeyenleri veya belirli kriterleri sağlayanları takipten çıkarır.
-- **Veritabanı Desteği:** Yapılan işlemleri SQLite veritabanında tutar, aynı kişiye tekrar işlem yapmaz.
-- **İnsan Taklidi:** Mouse hareketleri, bekleme süreleri ve kaydırma işlemleri randomize edilmiştir.
+## 🚀 Key Features
 
-## 🛠️ Kurulum
+### 🛡️ Safety & Guard System
+- **Smart Guard**: Monitors action limits, UI changes, and risks in real-time.
+- **Dry-Run Mode**: `DRY_RUN = True` enables a full simulation where the bot navigates, finds elements, and decides actions **without actually clicking** or modifying data. Perfect for testing and education.
+- **Structured Logging**: Detailed JSON logs for every action, decision, and error.
 
-1. **Projeyi İndirin:**
+### 🧩 Modular Architecture
+- **Plugin System**: Easily extend functionality without modifying the core code. (e.g., Session Statistics).
+- **Behavioral Strategies**:
+  - **Passive Growth**: Low intensity, focuses on keeping the account active.
+  - **Observation Only**: Just scrolls and watches (zero risk).
+  - **Manual Assist**: Automates tedious tasks like unfollowing carefully.
+- **Centralized Action Manager**: All clicks go through a central handler that respects Dry-Run and Guard rules.
+
+### 🧠 Intelligence
+- **Human-Like Navigation**: Uses random delays, mouse movements, and "Turbo" modes for realistic patterns.
+- **Context Awareness**: Knows *why* it is performing an action (e.g., "from_explore", "batch_follow").
+- **Smart Unfollow**: Detects who follows you back and filters by activity/verified status.
+
+---
+
+## 🛠️ Installation
+
+1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/kullaniciadi/instagram-bot.git
-   cd instagram-bot
+   git clone https://github.com/owple3058/InstaSmart-Bot.git
+   cd InstaSmart-Bot
    ```
 
-2. **Gerekli Kütüphaneleri Yükleyin:**
+2. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Yapılandırma Dosyalarını Hazırlayın:**
-   - `config.example.py` -> `config.py` (Kullanıcı bilgileri)
-   - `comments.example.txt` -> `comments.txt` (Yorum listesi)
-   - `whitelist.example.txt` -> `whitelist.txt` (Takipten çıkılmayacaklar)
-
+3. **Configuration:**
+   Copy the example config and edit it with your credentials.
    ```bash
-   # Windows için örnek kopyalama
+   # Windows
    copy config.example.py config.py
    copy comments.example.txt comments.txt
    copy whitelist.example.txt whitelist.txt
    ```
 
-   `config.py` dosyasını açıp kendi kullanıcı adı ve şifrenizi girin:
-
+   **Edit `config.py`:**
    ```python
-   # config.py
-   USERNAME = "kullanici_adiniz"
-   PASSWORD = "sifreniz"
+   USERNAME = "your_username"
+   PASSWORD = "your_password"
+   
+   # Enable Simulation Mode for testing
+   DRY_RUN = True 
    ```
 
-## ▶️ Kullanım
+---
 
-Botu başlatmak için terminalde şu komutu çalıştırın:
+## ▶️ Usage
 
+Run the main script:
 ```bash
 python main.py
 ```
 
-Açılan menüden yapmak istediğiniz işlemi seçin:
-1. **Zaman Tüneli Etkileşimi:** Ana sayfanızdaki gönderileri beğenir.
-2. **Keşfet Etkileşimi:** Keşfet sayfasındaki gönderilerle etkileşime girer.
-3. **Hashtag/Konum Analizi:** Belirli etiketlerdeki kullanıcıları bulur.
-4. **Hedef Profil Analizi:** Rakip sayfaların takipçilerini analiz eder ve takip eder.
-5. **Smart Unfollow:** Sizi takip etmeyenleri temizler.
+### Menu Options
+1. **Autopilot**: Runs a mix of strategies automatically.
+2. **Target Analysis**: Follows users from a target profile's followers.
+3. **Smart Unfollow**: Cleans up non-followers safely.
+4. **Behavior Modes**: Select specific behavioral patterns (Passive, Observation, etc.).
 
-## ⚠️ Yasal Uyarı
+---
 
-Bu proje sadece eğitim amaçlıdır. Instagram'ın kullanım koşullarına aykırı işlemlerden doğabilecek hesap kapanması veya kısıtlanması gibi durumlardan kullanıcı sorumludur. Lütfen limitleri abartmadan ve **Safe Mode** açık şekilde kullanın.
+## 🔌 Plugin System
 
-## 🤝 Katkıda Bulunma
+InstaSmart supports plugins to extend functionality. Plugins live in `src/plugins/`.
 
-Pull request'ler kabul edilir. Büyük değişiklikler için önce tartışma başlatınız.
+**Example: Creating a Simple Plugin**
+Create `src/plugins/my_plugin.py`:
 
-## 📄 Lisans
+```python
+from src.core.plugin_interface import BasePlugin
+
+class MyPlugin(BasePlugin):
+    name = "MyCustomPlugin"
+    
+    def on_bot_start(self):
+        print("Bot started! My plugin is running.")
+        
+    def before_action(self, action_type, target, info=None):
+        # Return False to cancel an action
+        return True
+```
+
+The bot will automatically load this plugin on startup.
+
+---
+
+## 📂 Project Structure
+
+```
+InstaSmart/
+├── main.py                 # Entry point
+├── config.py               # Settings (User created)
+├── src/
+│   ├── core/               # Core logic (Browser, Database, PluginManager)
+│   ├── guard/              # Safety & Risk Management
+│   ├── plugins/            # Custom Plugins
+│   ├── strategies/         # Action Strategies (Like, Follow, etc.)
+│   ├── scheduler/          # Time management
+│   └── logger/             # Structured logging
+```
+
+---
+
+## ⚠️ Disclaimer
+
+This project is for **educational purposes only**. The user is responsible for any account bans or restrictions resulting from actions that violate Instagram's terms of use. 
+
+We highly recommend using **Dry-Run Mode** (`DRY_RUN = True`) to understand how the bot works without risking your account.
+
+## 🤝 Contributing
+
+Pull requests are welcome! Please check the `src/strategies` folder if you want to add new behaviors.
+
+## 📄 License
 
 [MIT](LICENSE)

@@ -21,9 +21,11 @@ from src.utils.ai_manager import AIManager
 from src.logger.logger import logger
 from src.strategies.standard_strategies import LikeHashtagStrategy
 from src.strategies.behavior_strategies import PassiveGrowthStrategy, ObservationOnlyStrategy, ManualAssistStrategy
+from src.version import __version__
 
 class InstagramBot:
     def __init__(self, username, password):
+        print(f"InstaSmart Framework v{__version__} initializing...")
         self.username = username
         self.password = password
         

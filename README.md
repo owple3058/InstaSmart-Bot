@@ -1,5 +1,7 @@
 # 🤖 InstaSmart Framework (Open Source)
 
+![Version](https://img.shields.io/badge/version-3.0.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg) ![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)
+
 **InstaSmart** is a modular, safe, and intelligent Instagram automation framework developed using Python and Selenium. It is designed not just as a simple "bot", but as a **simulation framework** that mimics human behavior with high fidelity.
 
 It features a **Plugin System**, **Dry-Run (Simulation) Mode**, **Smart Guard**, and **Behavioral Strategies** to ensure safety and extensibility.

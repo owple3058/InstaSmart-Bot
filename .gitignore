@@ -14,6 +14,9 @@ config.py
 # Logs
 *.log
 geckodriver.log
+git_deploy_log.txt
+git_status_log.txt
+git_remote_log.txt
 
 # Database
 *.db
@@ -30,3 +33,7 @@ comments.txt
 known_followers.txt
 index_followers.txt
 index_following.txt
+
+# Deployment Scripts
+deploy.bat
+deploy_git.py
